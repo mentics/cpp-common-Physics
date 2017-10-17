@@ -49,7 +49,7 @@ void arriveEqualityConstraints(unsigned m, double *result, unsigned n, const dou
 
 	// endVel
 	const vect3& endVel = vf - vtf;
-	const mat3x8& endVelGrad = vfGrad - vfRelGrad;
+	const mat3x8& endVelGrad = vfRelGrad;
 
 	result[0] = endPos[0];
 	result[1] = endPos[1];
@@ -59,7 +59,7 @@ void arriveEqualityConstraints(unsigned m, double *result, unsigned n, const dou
 	result[5] = endVel[2];
 
 	if (grad != NULL) {
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 8; i++) {
 			grad[0 + i] = endPosGrad(0, i);
 			grad[8 + i] = endPosGrad(1, i);
 			grad[16 + i] = endPosGrad(2, i);

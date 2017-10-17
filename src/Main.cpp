@@ -308,7 +308,10 @@ int main() {
 			double result = enterOrbit(data, x);
 			if (result <= 0) {
 				std::cout << "**** ERROR: could not find solution ****" << std::endl;
+			} else {
+				std::cout << "Found solution: " << Eigen::Map<vect8>(x.data()).adjoint() << std::endl;
 			}
+
 
 			sumCalls += funcCalls;
 		}
@@ -316,25 +319,27 @@ int main() {
 
 	std::cout << "EnterOrbit avg func calls: " << (sumCalls / NUM_CASES) << std::endl;
 
-	//sumCalls = 0;
-	//NUM_CASES = 8;
+	sumCalls = 0;
+	NUM_CASES = 8;
 
-	//{
-	//	for (int i = 0; i < NUM_CASES; i++) {
-	//		funcCalls = 0;
-	//		constraintCalls = 0;
+	{
+		for (int i = 0; i < NUM_CASES; i++) {
+			funcCalls = 0;
+			constraintCalls = 0;
 
-	//		BasicTrajectory traj = randomBasicTrajectory();
-	//		InitData data = setupRandomCase(&traj);
-	//		std::vector<double> x(8);
-	//		double result = arrive(data, x);
-	//		if (result <= 0) {
-	//			std::cout << "**** ERROR: could not find solution ****" << std::endl;
-	//		}
+			BasicTrajectory traj = randomBasicTrajectory();
+			InitData data = setupRandomCase(&traj);
+			std::vector<double> x(8);
+			double result = arrive(data, x);
+			if (result <= 0) {
+				std::cout << "**** ERROR: could not find solution ****" << std::endl;
+			} else {
+				std::cout << "Found solution: " << Eigen::Map<vect8>(x.data()).adjoint() << std::endl;
+			}
 
-	//		sumCalls += funcCalls;
-	//	}
-	//}
+			sumCalls += funcCalls;
+		}
+	}
 
 	std::cout << "Arrive avg func calls: " << (sumCalls / NUM_CASES) << std::endl;
 }
