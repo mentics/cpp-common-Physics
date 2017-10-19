@@ -39,7 +39,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -148,18 +148,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\ArriveConstraints.h" />
-    <ClInclude Include="include\Common.h" />
-    <ClInclude Include="include\EnterOrbitConstraints.h" />
     <ClInclude Include="include\OptimizerCommon.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
     <ClInclude Include="include\TestOld.h" />
     <ClInclude Include="include\Trajectory.h" />
+    <ClInclude Include="include\TrajectoryCalculator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Constraints.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\Trajectory.cpp" />
+    <ClCompile Include="src\TrajectoryCalculator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\math\Math.vcxproj">
