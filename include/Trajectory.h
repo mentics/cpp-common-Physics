@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MenticsCommon.h"
 #include "MenticsMath.h"
 
 
