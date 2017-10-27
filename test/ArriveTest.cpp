@@ -19,7 +19,7 @@ namespace PhysicsTest {
 		}
 
 		TEST_METHOD(TestArriveGrad) {
-			BasicTrajectory traj = randomBasicTrajectory();
+			const BasicTrajectory traj = randomBasicTrajectory();
 			InitData data = setupRandomCase(&traj);
 			std::vector<double> at = { 1, 1, 1, 1, 1, 1, 1, 1 };
 			testGrad("arriveEqualityConstraints", 6, arriveEqualityConstraints, at, 0.0001, 0.0001, &data);
@@ -34,10 +34,10 @@ namespace PhysicsTest {
 			for (int i = 0; i < NUM_CASES; i++) {
 				funcCalls = 0;
 
-				BasicTrajectory traj = randomBasicTrajectory();
+				const BasicTrajectory traj = randomBasicTrajectory();
 				InitData data = setupRandomCase(&traj);
 				std::vector<double> x(8);
-				double result = calc.arrive(data, x);
+				const double result = calc.arrive(data, x);
 				if (result <= 0) {
 					LOG(lvl::error) << "**** ERROR: could not find solution ****" << std::endl;
 					Assert::Fail();

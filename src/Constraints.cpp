@@ -5,8 +5,8 @@
 int funcCalls = 0;
 
 double constraintA1(const std::vector<double>& x, std::vector<double>& grad, void* vdata) {
-	InitData* data = (InitData*)vdata;
-	double result = x[0] * x[0] + x[1] * x[1] + x[2] * x[2] - data->maxAcc2;
+	const InitData* data = static_cast<InitData*>(vdata);
+	const double result = x[0] * x[0] + x[1] * x[1] + x[2] * x[2] - data->maxAcc2;
 
 	if (!grad.empty()) {
 		grad[0] = 2.0 * x[0];
@@ -23,8 +23,8 @@ double constraintA1(const std::vector<double>& x, std::vector<double>& grad, voi
 }
 
 double constraintA2(const std::vector<double>& x, std::vector<double>& grad, void* vdata) {
-	InitData* data = (InitData*)vdata;
-	double result = x[3] * x[3] + x[4] * x[4] + x[5] * x[5] - data->maxAcc2;
+	const InitData* data = static_cast<InitData*>(vdata);
+	const double result = x[3] * x[3] + x[4] * x[4] + x[5] * x[5] - data->maxAcc2;
 
 	if (!grad.empty()) {
 		grad[0] = 0;
@@ -57,7 +57,7 @@ double arriveObjFunc(unsigned n, const double* x, double* grad, void* data) {
 void arriveEqualityConstraints(unsigned m, double *result, unsigned n, const double* x, double* grad, void* vdata) {
 	assert(m == 6); assert(n == 8);
 
-	InitData* data = (InitData*)vdata;
+	const InitData* data = static_cast<InitData*>(vdata);
 	const vect3& a1 = Eigen::Map<const vect3>(&x[0]);
 	const vect3& a2 = Eigen::Map<const vect3>(&x[3]);
 	const double t1 = x[6];
@@ -112,7 +112,7 @@ void arriveEqualityConstraints(unsigned m, double *result, unsigned n, const dou
 
 
 double checkArrive(const std::vector<double> &x, void *vdata) {
-	InitData* data = (InitData*)vdata;
+	InitData* data = static_cast<InitData*>(vdata);
 	const vect3& a1 = Eigen::Map<const vect3>(&x[0]);
 	const vect3& a2 = Eigen::Map<const vect3>(&x[3]);
 	const double t1 = x[6];
@@ -147,8 +147,8 @@ double checkArrive(const std::vector<double> &x, void *vdata) {
 	const mat3x8& endVelGrad = vfGrad - vfRelGrad;
 
 	std::vector<double> tmp(8);
-	double ca1 = constraintA1(x, tmp, data);
-	double ca2 = constraintA2(x, tmp, data);
+	const double ca1 = constraintA1(x, tmp, data);
+	const double ca2 = constraintA2(x, tmp, data);
 
 	return abs(endPos[0]) + abs(endPos[1]) + abs(endPos[2])
 		+ abs(endVel[0]) + abs(endVel[1]) + abs(endVel[2])
@@ -172,7 +172,7 @@ double enterOrbitObjFunc(unsigned n, const double* x, double* grad, void* data) 
 void enterOrbitEqualityConstraints(unsigned m, double *result, unsigned n, const double* x, double* grad, void* vdata) {
 	assert(m == 5); assert(n == 8);
 
-	InitData* data = (InitData*)vdata;
+	const InitData* data = static_cast<InitData*>(vdata);
 	const vect3& a1 = Eigen::Map<const vect3>(&x[0]);
 	const vect3& a2 = Eigen::Map<const vect3>(&x[3]);
 	const double t1 = x[6];
@@ -233,7 +233,7 @@ void enterOrbitEqualityConstraints(unsigned m, double *result, unsigned n, const
 }
 
 double checkEnterOrbit(const std::vector<double> &x, void *vdata) {
-	InitData* data = (InitData*)vdata;
+	InitData* data = static_cast<InitData*>(vdata);
 	const vect3& a1 = Eigen::Map<const vect3>(&x[0]);
 	const vect3& a2 = Eigen::Map<const vect3>(&x[3]);
 	const double t1 = x[6];
@@ -277,8 +277,8 @@ double checkEnterOrbit(const std::vector<double> &x, void *vdata) {
 	const vect8& endPosDistGrad = 2.0 * pfRel.adjoint() * pfRelGrad;
 
 	std::vector<double> tmp(8);
-	double ca1 = constraintA1(x, tmp, data);
-	double ca2 = constraintA2(x, tmp, data);
+	const double ca1 = constraintA1(x, tmp, data);
+	const double ca2 = constraintA2(x, tmp, data);
 
 	return abs(endVelMag) + abs(endVelPerpAxis) + abs(endVelPerpRadial) + abs(endPosPerpAxis) + abs(endPosDist)
 		+ abs(ca1) + abs(ca2);

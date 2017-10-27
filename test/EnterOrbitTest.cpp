@@ -19,7 +19,7 @@ namespace PhysicsTest {
 		}
 
 		TEST_METHOD(TestEnterOrbitGrad) {
-			BasicTrajectory traj = randomBasicTrajectory();
+			const BasicTrajectory traj = randomBasicTrajectory();
 			InitData data = setupRandomCase(&traj);
 			std::vector<double> at = { 1, 1, 1, 1, 1, 1, 1, 1 };
 			testGrad("enterOrbitEqualityConstraints", 5, enterOrbitEqualityConstraints, at, 0.0001, 0.0001, &data);
@@ -34,10 +34,10 @@ namespace PhysicsTest {
 			for (int i = 0; i < NUM_CASES; i++) {
 				funcCalls = 0;
 
-				BasicTrajectory traj = randomBasicTrajectory();
+				const BasicTrajectory traj = randomBasicTrajectory();
 				InitData data = setupRandomCase(&traj);
 				std::vector<double> x(8);
-				double result = calc.enterOrbit(data, x);
+				const double result = calc.enterOrbit(data, x);
 				if (result <= 0) {
 					LOG(lvl::error) << "**** ERROR: could not find solution ****\n  for " << traj.p0 << ", " << traj.v0 << ", " << traj.a0 << " : " << data.distance << ", " << data.axis;
 					Assert::Fail();

@@ -39,12 +39,12 @@ double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, Init
 		x[7] = (nextDouble() + 1.1)*20.0;
 		double minf;
 		try {
-			nlopt::result result = opt.optimize(x, minf);
+			const nlopt::result result = opt.optimize(x, minf);
 			LOG(lvl::debug) << "iteration " << iterations << " funcCalls=" << funcCalls << std::endl;
 			if (result < 0) {
 				LOG(lvl::warning) << "nlopt failed!";
 			} else {
-				double error = checkError(x, &data);
+				const double error = checkError(x, &data);
 				if (error > CLOSE_ENOUGH) {
 					LOG(lvl::warning) << "Checked error failure: " << result << std::endl;
 					continue;
@@ -58,7 +58,7 @@ double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, Init
 		}
 		catch (const std::exception& e) {
 			LOG(lvl::debug) << "iteration " << iterations << " funcCalls=" << funcCalls << " (nlopt exception: " << e.what() << ")" << std::endl;
-			double error = checkError(x, &data);
+			const double error = checkError(x, &data);
 			if (error > CLOSE_ENOUGH) {
 			}
 			else {

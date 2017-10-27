@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Constraints.cpp" />
+    <ClCompile Include="src\Trajectory.cpp" />
     <ClCompile Include="src\TrajectoryCalculator.cpp" />
   </ItemGroup>
   <ItemGroup>
