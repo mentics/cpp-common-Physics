@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MenticsCommon.h"
 #include "MenticsMath.h"
 
 struct PosVel {
@@ -86,3 +87,8 @@ public:
 
 extern const vect3 VZERO;
 extern const BasicTrajectory TRAJECTORY_ZERO;
+
+//using TrajectoryPtr = Trajectory*;
+//using TrajectoryUniquePtr = std::unique_ptr<Trajectory>;
+using TrajectoryPtr = nn::nn<Trajectory>;
+using TrajectoryUniquePtr = nn::nn<std::unique_ptr<Trajectory>>;
