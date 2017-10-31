@@ -29,6 +29,7 @@ public:
 
 private:
 };
+PTRS(Trajectory)
 
 class OffsetTrajectory {
 public:
@@ -56,9 +57,9 @@ public:
 		trajectory->posVelGrad(startTime + atTime, posGrad, velGrad);
 	}
 };
+PTRS(OffsetTrajectory)
 
-class BasicTrajectory : public Trajectory {
-public:
+struct BasicTrajectory : public Trajectory {
 	const vect3 p0;
 	const vect3 v0;
 	const vect3 a0;
@@ -85,14 +86,13 @@ public:
 		outVelGrad = a0;
 	}
 };
-
+PTRS(BasicTrajectory)
 
 extern const vect3 VZERO;
 extern const BasicTrajectory TRAJECTORY_ZERO;
 
-//using TrajectoryPtr = Trajectory*;
-//using TrajectoryUniquePtr = std::unique_ptr<Trajectory>;
-using TrajectoryPtr = nn::nn<Trajectory>;
-using TrajectoryUniquePtr = nn::nn<std::unique_ptr<Trajectory>>;
+inline BasicTrajectoryUniquePtr makeTrajZero() {
+	return uniquePtr<BasicTrajectory>(0.0, 1.0E31, VZERO, VZERO, VZERO);
+}
 
 }
