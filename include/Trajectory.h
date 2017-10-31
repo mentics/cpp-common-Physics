@@ -3,6 +3,8 @@
 #include "MenticsCommon.h"
 #include "MenticsMath.h"
 
+namespace MenticsGame {
+
 struct PosVel {
 	vect3 pos;
 	vect3 vel;
@@ -92,3 +94,5 @@ extern const BasicTrajectory TRAJECTORY_ZERO;
 //using TrajectoryUniquePtr = std::unique_ptr<Trajectory>;
 using TrajectoryPtr = nn::nn<Trajectory>;
 using TrajectoryUniquePtr = nn::nn<std::unique_ptr<Trajectory>>;
+
+}

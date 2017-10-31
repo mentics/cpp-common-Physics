@@ -3,6 +3,7 @@
 #include "MenticsCommon.h"
 #include "OptimizerCommon.h"
 
+namespace MenticsGame {
 
 double constraintA1(const std::vector<double>& x, std::vector<double>& grad, void* vdata);
 double constraintA2(const std::vector<double>& x, std::vector<double>& grad, void* vdata);
@@ -17,7 +18,7 @@ double checkEnterOrbit(const std::vector<double> &x, void *vdata);
 
 const double MAX_ACC = 10;
 
-class TrajectoryCalculator : cmn::CanLog {
+class TrajectoryCalculator : CanLog {
 public:
 	TrajectoryCalculator() : CanLog("TrajectoryCalculator"), optArrive(nlopt::LD_SLSQP, 8), optEnterOrbit(nlopt::LD_SLSQP, 8) {
 		init(optArrive, MAX_ACC);
@@ -65,3 +66,5 @@ private:
 		optEnterOrbit.add_inequality_constraint(constraintA2, data, CONSTRAINT_ERROR);
 	}
 };
+
+}

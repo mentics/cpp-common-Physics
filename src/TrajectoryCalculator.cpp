@@ -2,6 +2,8 @@
 
 #include "TrajectoryCalculator.h"
 
+namespace MenticsGame {
+
 const double CLOSE_ENOUGH = 0.1;
 
 void TrajectoryCalculator::init(nlopt::opt& opt, const double maxAcc) {
@@ -69,4 +71,6 @@ double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, Init
 		}
 	}
 	return found ? iterations : -1;
+}
+
 }

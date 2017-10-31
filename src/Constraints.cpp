@@ -2,6 +2,8 @@
 
 #include "OptimizerCommon.h"
 
+namespace MenticsGame {
+
 int funcCalls = 0;
 
 double constraintA1(const std::vector<double>& x, std::vector<double>& grad, void* vdata) {
@@ -284,3 +286,4 @@ double checkEnterOrbit(const std::vector<double> &x, void *vdata) {
 		+ abs(ca1) + abs(ca2);
 }
 
+}

@@ -5,6 +5,8 @@
 // All dv and dp assume that the source is at rest at the origin and the target is somewhere else and moving.
 // Therefore, don't use dv and dp, rather use vt0 and pt0.
 
+namespace MenticsGame {
+
 const double CONSTRAINT_ERROR = 1e-1;
 const double EPS = 1E-3;
 
@@ -45,4 +47,6 @@ inline mat3x8 endPointGrad(const vect3& a1, const vect3& a2, const double t1, co
 		0, partA1, 0, 0, partA2, 0, partT1(1), partT2(1),
 		0, 0, partA1, 0, 0, partA2, partT1(2), partT2(2);
 	return m;
+}
+
 }

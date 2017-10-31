@@ -3,6 +3,8 @@
 #include <Eigen/Dense>
 #include <vector>
 
+namespace MenticsGame {
+
 template <int SIZE>
 using vector = Eigen::Matrix<double, SIZE, 1>;
 using vect3 = Eigen::Vector3d;
@@ -258,3 +260,5 @@ double constraintEndPosDist(const std::vector<double> &x, std::vector<double> &g
 //	return abs(endvelmag) + abs(endvelperpaxis) + abs(endvelperpradial) + abs(endposperpaxis) + abs(endposdist) + abs(a1) + abs(a2);
 //}
 //
+
+}

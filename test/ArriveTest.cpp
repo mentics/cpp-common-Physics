@@ -15,7 +15,7 @@ namespace PhysicsTest {
 
 	public:
 		TEST_CLASS_INITIALIZE(BeforeClass) {
-			mentics::test::setupLog();
+			setupLog();
 		}
 
 		TEST_METHOD(TestArriveGrad) {
