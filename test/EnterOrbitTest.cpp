@@ -30,7 +30,7 @@ namespace PhysicsTest {
 			vect3 pos, vel, targPos, targVel;
 
 			int sumCalls = 0;
-			int NUM_CASES = 1000;
+			int NUM_CASES = 100;
 			for (int i = 0; i < NUM_CASES; i++) {
 				funcCalls = 0;
 
