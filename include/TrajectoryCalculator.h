@@ -42,6 +42,7 @@ private:
 	void init(nlopt::opt& opt, const double maxAcc);
 	double solve(nlopt::opt& opt, std::vector<double>& x, InitData& data, const calcError checkError);
 
+	// TODO: move to .cpp file
 	void setupArriveCase(InitData* data) {
 		optArrive.set_min_objective(arriveObjFunc, data);
 
@@ -54,6 +55,7 @@ private:
 		optArrive.add_inequality_constraint(constraintA2, data, CONSTRAINT_ERROR);
 	}
 
+	// TODO: move to .cpp file
 	void setupEnterOrbitCase(InitData* data) {
 		optEnterOrbit.set_min_objective(enterOrbitObjFunc, data);
 

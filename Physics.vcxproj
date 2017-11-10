@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\OptimizerCommon.h" />
+    <ClInclude Include="include\PhysicsCommon.h" />
     <ClInclude Include="include\TestOld.h" />
     <ClInclude Include="include\Trajectory.h" />
     <ClInclude Include="include\TrajectoryCalculator.h" />

@@ -7,7 +7,7 @@ inline BasicTrajectory randomBasicTrajectory() {
 	return BasicTrajectory(0, 100, randomVector(100), randomVector(2), randomVector(1));
 }
 
-inline InitData setupRandomCase(const Trajectory* trajectory) {
+inline InitData setupRandomCase(const TrajectoryPtr trajectory) {
 	InitData data = {
 		OffsetTrajectory(0, vect3::Zero(), vect3::Zero(), trajectory),
 		randomVector(1).normalized(),

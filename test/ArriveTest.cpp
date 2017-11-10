@@ -19,8 +19,8 @@ namespace PhysicsTest {
 		}
 
 		TEST_METHOD(TestArriveGrad) {
-			const BasicTrajectory traj = randomBasicTrajectory();
-			InitData data = setupRandomCase(&traj);
+			BasicTrajectory traj = randomBasicTrajectory();
+			InitData data = setupRandomCase(nn::nn_addr(traj));
 			std::vector<double> at = { 1, 1, 1, 1, 1, 1, 1, 1 };
 			testGrad("arriveEqualityConstraints", 6, arriveEqualityConstraints, at, 0.0001, 0.0001, &data);
 		}
@@ -34,8 +34,8 @@ namespace PhysicsTest {
 			for (int i = 0; i < NUM_CASES; i++) {
 				funcCalls = 0;
 
-				const BasicTrajectory traj = randomBasicTrajectory();
-				InitData data = setupRandomCase(&traj);
+				BasicTrajectory traj = randomBasicTrajectory();
+				InitData data = setupRandomCase(nn::nn_addr(traj));
 				std::vector<double> x(8);
 				const double result = calc.arrive(data, x);
 				if (result <= 0) {

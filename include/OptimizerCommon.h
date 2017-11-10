@@ -14,10 +14,10 @@ extern int funcCalls;
 
 struct InitData {
 	OffsetTrajectory target;
-	vect3 axis;
-	double distance;
-	double maxAcc;
-	double maxAcc2;
+	vect3 axis;		// The axis for the orbit to enter in enter orbit trajectory
+	double distance;// The radial distance for enter orbit, or the distance from target for arrive
+	double maxAcc;	// Maximum acceleration allowed
+	double maxAcc2;	// maxAcc^2 stored for efficiency because it's used many times
 };
 
 inline vect3 endVel(const vect3& a1, const vect3& a2, const double t1, const double t2) {
