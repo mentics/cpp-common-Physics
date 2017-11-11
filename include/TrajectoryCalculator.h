@@ -25,6 +25,28 @@ public:
 		init(optEnterOrbit, MAX_ACC);
 	}
 
+	// TODO: move this to .cpp file
+	TrajectoryUniquePtr arrive(double atTime, TrajectoryPtr source, TrajectoryPtr target, double distance) {
+		vect3 p0, v0;
+		source->posVel(atTime, p0, v0);
+		std::vector<double> x(8); // TODO: we can probably change this to an array all the way down but not sure we can because nlopt might require a vector if we can't use pointer/C-array style call
+		arrive(InitData::forArrive(atTime, p0, v0, target, distance, MAX_ACC), x);
+		// TODO: need to check for success and do something else if no solution found
+		const vect3& a1 = Eigen::Map<const vect3>(&x[0]);
+		const vect3& a2 = Eigen::Map<const vect3>(&x[3]);
+		const double t1 = x[6];
+		const double t2 = x[7];
+		const double tmid = atTime + t1;
+		const double tend = tmid + t2;
+		std::vector<TrajectoryUniquePtr> trajs;
+		//BasicTrajectory traj1(atTime, tmid, p0, v0, a1);
+		trajs.emplace_back(uniquePtr<BasicTrajectory>(atTime, tmid, p0, v0, a1));
+		trajs[0]->posVel(tmid, p0, v0);
+		//BasicTrajectory traj2(tmid, tend, p0, v0, a2);
+		trajs.emplace_back(uniquePtr<BasicTrajectory>(tmid, tend, p0, v0, a2));
+		return uniquePtr<CompoundTrajectory>(std::move(trajs));
+	}
+
 	double arrive(InitData &data, std::vector<double>& x) {
 		setupArriveCase(&data);
 		return solve(optArrive, x, data, checkArrive);

@@ -58,5 +58,13 @@ namespace PhysicsTest {
 
 			LOG(lvl::info) << "Arrive avg func calls: " << (sumCalls / NUM_CASES) << std::endl;
 		}
+
+		TEST_METHOD(TestArriveTrajectory) {
+			TrajectoryCalculator calc;
+			//BasicTrajectory source = randomBasicTrajectory();
+			//BasicTrajectory target = randomBasicTrajectory();
+			//TrajectoryUniquePtr arriveTraj = calc.arrive(0, nn::nn_addr(source), nn::nn_addr(target), 2);
+			// TODO: confirm result
+		}
 	};
 }
