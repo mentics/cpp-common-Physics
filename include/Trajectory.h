@@ -25,7 +25,7 @@ class CompoundTrajectory : public Trajectory {
 public:
 	std::vector<TrajectoryUniquePtr> trajs;
 
-	CompoundTrajectory(std::vector<TrajectoryUniquePtr> trajs)
+	CompoundTrajectory(std::vector<TrajectoryUniquePtr> &trajs)
 			: Trajectory(trajs.front()->startTime, trajs.back()->endTime), trajs(std::move(trajs)) {}
 
 	Trajectory* trajAt(const double atTime) const {
