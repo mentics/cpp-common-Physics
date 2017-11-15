@@ -4,7 +4,7 @@
 
 namespace MenticsGame {
 
-const double CLOSE_ENOUGH = 0.1;
+const double CLOSE_ENOUGH = 0.01;
 
 void TrajectoryCalculator::init(nlopt::opt& opt, const double maxAcc) {
 	std::vector<double> lowerBound = { -maxAcc, -maxAcc, -maxAcc, -maxAcc, -maxAcc, -maxAcc, 0, 0 };
@@ -50,8 +50,7 @@ double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, Init
 				if (error > CLOSE_ENOUGH) {
 					LOG(lvl::warning) << "Checked error failure: " << result << std::endl;
 					continue;
-				}
-				else {
+				} else {
 					//printf("Found minimum at %g,%g after calls func: %d constraints: %d\n", x[6], x[7], funcCalls, constraintCalls);
 					// Success, stop looping
 					found = true;

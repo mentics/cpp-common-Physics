@@ -6,6 +6,9 @@
 
 namespace MenticsGame {
 
+class Trajectory;
+PTRS(Trajectory)
+
 class Trajectory {
 public:
 	const double startTime;
@@ -13,20 +16,29 @@ public:
 
 	Trajectory(const double startTime, const double endTime) : startTime(startTime), endTime(endTime) {}
 
+	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const = 0;
+
 	virtual void posVel(const double atTime, vect3& pos, vect3& vel) const = 0;
 	virtual void posVelAcc(const double atTime, PosVelAccPtr pva) const = 0;
 	virtual void posVelGrad(const double atTime, vect3& posGrad, vect3& velGrad) const = 0;
 
 private:
 };
-PTRS(Trajectory)
 
 class CompoundTrajectory : public Trajectory {
 public:
 	std::vector<TrajectoryUniquePtr> trajs;
 
-	CompoundTrajectory(std::vector<TrajectoryUniquePtr> &trajs)
+	CompoundTrajectory(std::vector<TrajectoryUniquePtr>& trajs)
 			: Trajectory(trajs.front()->startTime, trajs.back()->endTime), trajs(std::move(trajs)) {}
+
+	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const {
+		std::vector<TrajectoryUniquePtr> newTrajs;
+		for (auto const& traj : trajs) {
+			newTrajs.push_back(std::move(traj->transform(offTime, offPos, offVel)));
+		}
+		return uniquePtr<CompoundTrajectory>(newTrajs);
+	}
 
 	Trajectory* trajAt(const double atTime) const {
 		for (auto traj = trajs.rbegin(); traj != trajs.rend(); ++traj) {
@@ -55,33 +67,34 @@ PTRS(CompoundTrajectory)
 // Wraps a trajectory providing a way to offset it in time, position, and velocity.
 // To calculate a trajectory, we move the source to the origin, and we have to transform the target trajectory in the same way.
 // Instances of this class are not held long term. They are just for temporary use in calculations, thus the non-ownership pointer to trjaectory.
-class OffsetTrajectory {
-public:
-	const double startTime;
-	const vect3 p0;
-	const vect3 v0;
-	const TrajectoryPtr trajectory;
-
-	OffsetTrajectory(const double startTime, const vect3 p0, const vect3 v0, const TrajectoryPtr trajectory)
-		: startTime(startTime), p0(p0), v0(v0), trajectory(trajectory) {}
-
-	void posVel(const double atTime, vect3& pos, vect3& vel) const {
-		trajectory->posVel(startTime + atTime, pos, vel);
-		pos -= p0;
-		vel -= v0;
-	}
-
-	void posVelAcc(const double atTime, PosVelAccPtr pva) const {
-		trajectory->posVelAcc(startTime + atTime, pva);
-		pva->pos -= p0;
-		pva->vel -= v0;
-	}
-
-	void posVelGrad(const double atTime, vect3& posGrad, vect3& velGrad) const {
-		trajectory->posVelGrad(startTime + atTime, posGrad, velGrad);
-	}
-};
-PTRS(OffsetTrajectory)
+// This is implemented wrong because it calls underlying trajectory which doesn't have translated pos/vel
+//class OffsetTrajectory {
+//public:
+//	const double startTime;
+//	const vect3 p0;
+//	const vect3 v0;
+//	const TrajectoryPtr trajectory;
+//
+//	OffsetTrajectory(const double startTime, const vect3 p0, const vect3 v0, const TrajectoryPtr trajectory)
+//		: startTime(startTime), p0(p0), v0(v0), trajectory(trajectory) {}
+//
+//	void posVel(const double atTime, vect3& pos, vect3& vel) const {
+//		trajectory->posVel(startTime + atTime, pos, vel);
+//		pos -= p0;
+//		vel -= v0;
+//	}
+//
+//	void posVelAcc(const double atTime, PosVelAccPtr pva) const {
+//		trajectory->posVelAcc(startTime + atTime, pva);
+//		pva->pos -= p0;
+//		pva->vel -= v0;
+//	}
+//
+//	void posVelGrad(const double atTime, vect3& posGrad, vect3& velGrad) const {
+//		trajectory->posVelGrad(startTime + atTime, posGrad, velGrad);
+//	}
+//};
+//PTRS(OffsetTrajectory)
 
 class BasicTrajectory : public Trajectory {
 public:
@@ -91,6 +104,12 @@ public:
 
 	BasicTrajectory(const double startTime, const double endTime, const vect3 p0, const vect3 v0, const vect3 a0)
 		: Trajectory(startTime, endTime), p0(p0), v0(v0), a0(a0) {}
+
+	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const {
+		PosVelAcc pva;
+		posVelAcc(offTime, nn::nn_addr(pva));
+		return uniquePtr<BasicTrajectory>(0, endTime - offTime, pva.pos - offPos, pva.vel - offVel, pva.acc);
+	}
 
 	virtual void posVel(const double atTime, vect3& outPos, vect3& outVel) const {
 		const double t = (atTime - startTime);

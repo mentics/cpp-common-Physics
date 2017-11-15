@@ -47,9 +47,11 @@ namespace PhysicsTest {
 				}
 
 				traj.posVel(x[6] + x[7], targPos, targVel);
-				LOG(lvl::info) << targPos.adjoint() << ", " << targVel.adjoint();
+				LOG(lvl::info) << targPos.adjoint() << ", L" << targVel.adjoint();
 				endForNloptX(x, pos, vel);
-				LOG(lvl::info) << pos.adjoint() << ", " << vel.adjoint();
+				LOG(lvl::info) << pos.adjoint() << ", L" << vel.adjoint();
+				double resultDistance = (pos - targPos).norm();
+				Assert::IsTrue(resultDistance < 0.1);
 				Assert::IsTrue(pos.isApprox(targPos, 0.1));
 				Assert::IsTrue(vel.isApprox(targVel, 0.1));
 
@@ -59,27 +61,42 @@ namespace PhysicsTest {
 			LOG(lvl::info) << "Arrive avg func calls: " << (sumCalls / NUM_CASES) << std::endl;
 		}
 
-		TEST_METHOD(TestArriveTrajectory) {
+		TEST_METHOD(TestArriveTrajectorySame) {
+			// TODO
 			TrajectoryCalculator calc;
 			BasicTrajectory source = randomBasicTrajectory();
 			BasicTrajectory target = randomBasicTrajectory();
 			TrajectoryUniquePtr arriveTraj = calc.arrive(0, nn::nn_addr(source), nn::nn_addr(target), 2);
 
-			// TODO: confirm result
 			double endtime = arriveTraj->endTime;
 
 			vect3 pos, vel;
 			target.posVel(endtime, pos, vel);
-			LOG(lvl::info) << "target:" << pos.adjoint() << ", " << vel.adjoint();
-
 			vect3 endpos, endvel;
 			arriveTraj->posVel(endtime, endpos, endvel);
-			LOG(lvl::info) << "Arrive: " << endpos.adjoint() << ", " << endvel.adjoint();
 
-			LOG(lvl::info) << "Distance: " << (endpos - pos).norm();
+			Assert::IsTrue(vel.isApprox(endvel, 0.1), L"Velocity are not equa");
+			Assert::IsTrue(pos.isApprox(endpos, 0.1), L"Position are not equa");
+		}
 
-			Assert::IsTrue(vel.isApprox(endvel, 0.1), L"Velocity are not equal");
-			Assert::IsTrue(pos.isApprox(endpos, 0.1), L"Position are not equal");
+		TEST_METHOD(TestArriveTrajectory) {
+			TrajectoryCalculator calc;
+			double startTime = 1.0;
+			BasicTrajectory source(0, 10, vect3(0,0,0), vect3(1,0,0), vect3(0,0,0));
+			BasicTrajectory target(0, 10, vect3(1,0,0), vect3(1,0,0), vect3(0,0,0));
+			TrajectoryUniquePtr arriveTraj = calc.arrive(startTime, nn::nn_addr(source), nn::nn_addr(target), 2);
+
+			double endtime = arriveTraj->endTime;
+
+			vect3 targPos, targVel;
+			target.posVel(endtime, targPos, targVel);
+			vect3 srcPos, srcVel;
+			arriveTraj->posVel(endtime, srcPos, srcVel);
+
+			double resultDistance = (srcPos - targPos).norm();
+			Assert::AreEqual(0, resultDistance, 0.1, L"Distance not 0");
+			Assert::IsTrue(srcPos.isApprox(targPos, 0.1), L"Position are not equa");
+			Assert::IsTrue(srcVel.isApprox(targVel, 0.1), L"Velocity are not equa");
 		}
 
 		// NOTE:
@@ -87,7 +104,6 @@ namespace PhysicsTest {
 		// * in TrajectoryCalculator::arrive the distance parameter does not alter the result
 
 		TEST_METHOD(TestArriveCompoundTrajectory) {
-
 			BasicTrajectory source = randomBasicTrajectory();
 
 			std::vector<TrajectoryUniquePtr> trajs;
@@ -96,8 +112,8 @@ namespace PhysicsTest {
 			//trajs.push_back(uniquePtr<BasicTrajectory>(100, 200, randomVector(200), randomVector(4), randomVector(3)));
 
 			// ok
-			trajs.push_back(uniquePtr<BasicTrajectory>(0, 100, randomVector(50), randomVector(6), randomVector(7)));
-			trajs.push_back(uniquePtr<BasicTrajectory>(100, 200, randomVector(200), randomVector(4), randomVector(3)));
+			trajs.push_back(uniquePtr<BasicTrajectory>(0, 2, randomVector(50), randomVector(6), randomVector(7)));
+			trajs.push_back(uniquePtr<BasicTrajectory>(2, 10, randomVector(200), randomVector(4), randomVector(3)));
 
 			CompoundTrajectory target(trajs);
 
@@ -107,21 +123,28 @@ namespace PhysicsTest {
 			double endtime = arrive->endTime;
 			vect3 apos, avel;
 			arrive->posVel(endtime, apos, avel);
-			LOG(lvl::info) << apos.adjoint() << ", " << avel.adjoint();
+			LOG(lvl::info) << apos.adjoint() << ", L" << avel.adjoint();
 			
 			vect3 pos, vel;
 			target.posVel(endtime, pos, vel);
-			LOG(lvl::info) << pos.adjoint() << ", " << vel.adjoint();
+			LOG(lvl::info) << pos.adjoint() << ", L" << vel.adjoint();
 
-			LOG(lvl::info) << "Distance: " << (apos - pos).norm();
+			double resultDistance = (apos - pos).norm();
+			LOG(lvl::info) << "Distance: " << resultDistance;
 
-			// TODO Make sure the test has the solution in the second BasicTrajectory so we can make sure it handles across the border of the two.
-			//vect3 pos2, vel2;
-			//target.trajs[1]->posVel(endtime, pos2, vel2);
-			//LOG(lvl::info) << pos2.adjoint() << ", " << vel2.adjoint();
+			Assert::IsTrue(endtime > 2); // Ensure the end is in the second target BasicTrajectory
+			Assert::IsTrue(vel.isApprox(avel, 0.1), L"Velocity are not equa");
+			Assert::IsTrue(pos.isApprox(apos, 0.1), L"Position are not equa");
+		}
 
-			Assert::IsTrue(vel.isApprox(avel, 0.1),L"Velocity are not equal");
-			Assert::IsTrue(pos.isApprox(apos, 0.1),L"Position are not equal");
+		TEST_METHOD(TrajectoryTransformTest) {
+			vect3 pos1(1,0,0), vel1(0,1,0), acc1(0, 0, 1);
+			BasicTrajectory traj(1, 2, pos1, vel1, acc1);
+			TrajectoryUniquePtr transformed = traj.transform(2, vect3(4, 1, 0), vect3(1, 3, 0));
+			vect3 pos, vel;
+			transformed->posVel(0, pos, vel);
+			Assert::IsTrue(vel.isApprox(1 * vel1 + 1*acc1 - vect3(1,3, 0), 0.001), L"Unexpected velocity");
+			Assert::IsTrue(pos.isApprox(pos1 + 1*vel1 + 0.5*acc1 - vect3(4,1,0), 0.001), L"Unexpected position");
 		}
 	};
 }

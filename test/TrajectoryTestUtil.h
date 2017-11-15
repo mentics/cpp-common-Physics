@@ -9,7 +9,7 @@ inline BasicTrajectory randomBasicTrajectory() {
 
 inline InitData setupRandomCase(const TrajectoryPtr trajectory) {
 	InitData data = {
-		OffsetTrajectory(0, vect3::Zero(), vect3::Zero(), trajectory),
+		trajectory->transform(0, vect3::Zero(), vect3::Zero()),
 		randomVector(1).normalized(),
 		nextDouble() + 2,
 		10.0,

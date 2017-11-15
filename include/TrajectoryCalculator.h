@@ -30,7 +30,11 @@ public:
 		vect3 p0, v0;
 		source->posVel(atTime, p0, v0);
 		std::vector<double> x(8); // TODO: we can probably change this to an array all the way down but not sure we can because nlopt might require a vector if we can't use pointer/C-array style call
-		arrive(InitData::forArrive(atTime, p0, v0, target, distance, MAX_ACC), x);
+		double result = arrive(InitData::forArrive(atTime, p0, v0, target, distance, MAX_ACC), x);
+		if (result < 0) {
+			// TODO: don't throw exception
+			throw L"Could not calculate arrive";
+		}
 		// TODO: need to check for success and do something else if no solution found
 		const vect3& a1 = Eigen::Map<const vect3>(&x[0]);
 		const vect3& a2 = Eigen::Map<const vect3>(&x[3]);
@@ -39,11 +43,10 @@ public:
 		const double tmid = atTime + t1;
 		const double tend = tmid + t2;
 		std::vector<TrajectoryUniquePtr> trajs;
-		//BasicTrajectory traj1(atTime, tmid, p0, v0, a1);
 		trajs.emplace_back(uniquePtr<BasicTrajectory>(atTime, tmid, p0, v0, a1));
-		trajs[0]->posVel(tmid, p0, v0);
-		//BasicTrajectory traj2(tmid, tend, p0, v0, a2);
-		trajs.emplace_back(uniquePtr<BasicTrajectory>(tmid, tend, p0, v0, a2));
+		vect3 p, v;
+		trajs[0]->posVel(tmid, p, v);
+		trajs.emplace_back(uniquePtr<BasicTrajectory>(tmid, tend, p, v, a2));
 		return uniquePtr<CompoundTrajectory>(std::move(trajs));
 	}
 

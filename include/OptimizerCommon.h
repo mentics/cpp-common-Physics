@@ -13,7 +13,7 @@ const double EPS = 1E-3;
 extern int funcCalls;
 
 struct InitData {
-	OffsetTrajectory target;
+	TrajectoryUniquePtr target;
 	vect3 axis;		// The axis for the orbit to enter in enter orbit trajectory
 	double distance;// The radial distance for enter orbit, or the distance from target for arrive
 	double maxAcc;	// Maximum acceleration allowed
@@ -21,7 +21,7 @@ struct InitData {
 
 	static InitData forArrive(double atTime, const vect3 &p0, const vect3 &v0, const TrajectoryPtr target, const double distance, const double maxAcc) {
 		return InitData {
-			OffsetTrajectory(atTime, p0, v0, target),
+			target->transform(atTime, p0, v0),
 			VZERO,
 			distance,
 			maxAcc,
