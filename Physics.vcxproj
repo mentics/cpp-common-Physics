@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\CollideTrajectory.h" />
     <ClInclude Include="include\OptimizerCommon.h" />
     <ClInclude Include="include\PhysicsCommon.h" />
     <ClInclude Include="include\TestOld.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="include\TrajectoryCalculator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CollideTrajectory.cpp" />
     <ClCompile Include="src\Constraints.cpp" />
     <ClCompile Include="src\Trajectory.cpp" />
     <ClCompile Include="src\TrajectoryCalculator.cpp" />
