@@ -108,14 +108,19 @@ std::tuple<TrajectoryUniquePtr, bool> TrajectoryCalculator::calcCollideTraj(cons
 	coeff[4] = pp.dot(pp);
 
 	solver.compute(coeff);
-	//const auto& roots = solver.roots();
-	std::vector<std::complex<double>> roots;
-	solver.realRoots(roots);
+	const auto& roots = solver.roots();
+
+	using PolynomialSolver = Eigen::PolynomialSolver<double, Eigen::Dynamic>;
+	const PolynomialSolver::RealScalar& threshold = Eigen::NumTraits<PolynomialSolver::Scalar>::dummy_precision();
+
+	// std::vector<std::complex<double>> roots;
+	// solver.realRoots(roots);
 
 	double lowest = -1;
 	for (int i = 0; i < roots.size(); ++i) {
-		if (roots[i].real() >= 0 && lowest < roots[i].real()) {
-			lowest = roots[i].real();
+		auto r = roots[i];
+		if (std::abs(r.imag()) < threshold && r.real() >= 0 && lowest < r.real()) {
+			lowest = r.real();
 		}
 	}
 
