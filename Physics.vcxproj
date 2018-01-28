@@ -74,6 +74,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\Antuan\Desktop\PR\QuipTrials\lib\spdlog\include;C:\Users\Antuan\Desktop\PR\QuipTrials\lib\oBB;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Antuan\Desktop\PR\QuipTrials\lib\nlopt-2.4.2-dll32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

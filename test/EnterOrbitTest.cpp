@@ -1,17 +1,16 @@
-#include "stdafx.h"
+#include "../../common/include/stdafx.h"
 #include "CppUnitTest.h"
 
-#include "MenticsCommonTest.h"
-#include "MenticsMath.h"
-#include "TrajectoryCalculator.h"
-#include "TrajectoryTestUtil.h"
+#include "../../common/include/MenticsCommonTest.h"
+#include "../../math/include/MenticsMath.h"
+#include "../../physics/include/TrajectoryCalculator.h"
+#include "../../physics/test/TrajectoryTestUtil.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace PhysicsTest {	
 	TEST_CLASS(EnterOrbitTest) {
-		boost::log::sources::severity_logger<boost::log::trivial::severity_level> lg;
-		const std::string name = "EnterOrbitTest";
+		
 
 	public:
 		TEST_CLASS_INITIALIZE(BeforeClass) {
@@ -26,6 +25,8 @@ namespace PhysicsTest {
 		}
 
 		TEST_METHOD(TestEnterOrbit) {
+			const auto m_log = spdlog::stdout_logger_st("unique name");
+
 			TrajectoryCalculator calc;
 			vect3 pos, vel, targPos, targVel;
 
@@ -39,11 +40,11 @@ namespace PhysicsTest {
 				std::vector<double> x(8);
 				const double result = calc.enterOrbit(data, x);
 				if (result <= 0) {
-					LOG(lvl::error) << "**** ERROR: could not find solution ****\n  for " << traj.p0 << ", " << traj.v0 << ", " << traj.a0 << " : " << data.distance << ", " << data.axis;
+					m_log->error("**** ERROR: could not find solution ****\n  for {0},{1},{2},{3},{4}", traj.p0,traj.v0,traj.a0,data.distance, data.axis);
 					Assert::Fail();
 				}
 				else {
-					LOG(lvl::info) << "Found solution: " << Eigen::Map<vect8>(x.data()).adjoint();
+					m_log->info("Found solution: {0}", Eigen::Map<vect8>(x.data()).adjoint());
 				}
 
 				traj.posVel(x[6]+x[7], targPos, targVel);
@@ -56,7 +57,7 @@ namespace PhysicsTest {
 				sumCalls += funcCalls;
 			}
 
-			LOG(lvl::info) << "EnterOrbit avg func calls: " << (sumCalls / NUM_CASES) << std::endl;
+			m_log->info("EnterOrbit avg func calls: {0}\n", (sumCalls / NUM_CASES));
 		}
 	};
 }

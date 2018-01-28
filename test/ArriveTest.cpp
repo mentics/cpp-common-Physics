@@ -1,16 +1,16 @@
-#include "stdafx.h"
+#include "../../common/include/stdafx.h"
 #include "CppUnitTest.h"
 
-#include "MenticsCommonTest.h"
-#include "MenticsMath.h"
-#include "TrajectoryCalculator.h"
-#include "TrajectoryTestUtil.h"
+#include "../../common/include/MenticsCommonTest.h"
+#include "../../math/include/MenticsMath.h"
+#include "../../physics/include/TrajectoryCalculator.h"
+#include "../../physics/test/TrajectoryTestUtil.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace PhysicsTest {	
 	TEST_CLASS(ArriveTest) {
-		boost::log::sources::severity_logger<boost::log::trivial::severity_level> lg;
+		
 		const std::string name = "ArriveTest";
 
 	public:
