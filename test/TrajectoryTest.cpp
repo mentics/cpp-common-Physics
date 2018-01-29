@@ -7,7 +7,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace PhysicsTest {
 	TEST_CLASS(TrajectoryTest) {
-		boost::log::sources::severity_logger<boost::log::trivial::severity_level> lg;
+		//boost::log::sources::severity_logger<boost::log::trivial::severity_level> lg;
 		const std::string name = "PhysicsTest";
 	public:
 

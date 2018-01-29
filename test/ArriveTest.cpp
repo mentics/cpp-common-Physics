@@ -1,5 +1,5 @@
 #include "../../common/include/stdafx.h"
-#include "CppUnitTest.h"
+
 
 #include "../../common/include/MenticsCommonTest.h"
 #include "../../math/include/MenticsMath.h"
@@ -26,6 +26,7 @@ namespace PhysicsTest {
 		}
 
 		TEST_METHOD(TestArrive) {
+			const auto m_log = spdlog::stdout_logger_mt("unique_name");
 			TrajectoryCalculator calc;
 			vect3 pos, vel, targPos, targVel;
 
@@ -39,17 +40,17 @@ namespace PhysicsTest {
 				std::vector<double> x(8);
 				const double result = calc.arrive(data, x);
 				if (result <= 0) {
-					LOG(lvl::error) << "**** ERROR: could not find solution ****" << std::endl;
+					m_log->error("**** ERROR: could not find solution ****\n");
 					Assert::Fail();
 				}
 				else {
-					LOG(lvl::info) << "Found solution: " << Eigen::Map<vect8>(x.data()).adjoint() << std::endl;
+					m_log->info("Found solution: {0}\n", Eigen::Map<vect8>(x.data()).adjoint());
 				}
 
 				traj.posVel(x[6] + x[7], targPos, targVel);
-				LOG(lvl::info) << targPos.adjoint() << ", L" << targVel.adjoint();
+				m_log->info("{0}, L{1}",targPos.adjoint(), targVel.adjoint());
 				endForNloptX(x, pos, vel);
-				LOG(lvl::info) << pos.adjoint() << ", L" << vel.adjoint();
+				m_log->info("{0}, L{1}",pos.adjoint(), vel.adjoint());
 				double resultDistance = (pos - targPos).norm();
 				Assert::IsTrue(resultDistance < 0.1);
 				Assert::IsTrue(pos.isApprox(targPos, 0.1));
@@ -58,7 +59,7 @@ namespace PhysicsTest {
 				sumCalls += funcCalls;
 			}
 
-			LOG(lvl::info) << "Arrive avg func calls: " << (sumCalls / NUM_CASES) << std::endl;
+			m_log->info("Arrive avg func calls: {0}\n" , (sumCalls / NUM_CASES));
 		}
 
 		TEST_METHOD(TestArriveTrajectorySame) {
@@ -104,6 +105,7 @@ namespace PhysicsTest {
 		// * in TrajectoryCalculator::arrive the distance parameter does not alter the result
 
 		TEST_METHOD(TestArriveCompoundTrajectory) {
+			const auto m_log = spdlog::stdout_logger_mt("unique_name 2");
 			BasicTrajectory source = randomBasicTrajectory();
 
 			std::vector<TrajectoryUniquePtr> trajs;
@@ -123,14 +125,14 @@ namespace PhysicsTest {
 			double endtime = arrive->endTime;
 			vect3 apos, avel;
 			arrive->posVel(endtime, apos, avel);
-			LOG(lvl::info) << apos.adjoint() << ", L" << avel.adjoint();
+			m_log->info("{0}, L{1}", apos.adjoint(), avel.adjoint());
 			
 			vect3 pos, vel;
 			target.posVel(endtime, pos, vel);
-			LOG(lvl::info) << pos.adjoint() << ", L" << vel.adjoint();
+			m_log->info("{0}, L{1}", pos.adjoint(),  vel.adjoint());
 
 			double resultDistance = (apos - pos).norm();
-			LOG(lvl::info) << "Distance: " << resultDistance;
+			m_log->info("Distance: {0}", resultDistance);
 
 			Assert::IsTrue(endtime > 2); // Ensure the end is in the second target BasicTrajectory
 			Assert::IsTrue(vel.isApprox(avel, 0.1), L"Velocity are not equa");
