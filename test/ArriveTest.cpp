@@ -1,10 +1,10 @@
-#include "../../common/include/stdafx.h"
+#include "stdafx.h"
 
 
-#include "../../common/include/MenticsCommonTest.h"
-#include "../../math/include/MenticsMath.h"
-#include "../../physics/include/TrajectoryCalculator.h"
-#include "../../physics/test/TrajectoryTestUtil.h"
+#include "MenticsCommonTest.h"
+#include "MenticsMath.h"
+#include "TrajectoryCalculator.h"
+#include "TrajectoryTestUtil.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
