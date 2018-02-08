@@ -2,7 +2,7 @@
 
 #include "MenticsCommon.h"
 #include "OptimizerCommon.h"
-#include "..\unsupported\Eigen\Polynomials"
+#include "unsupported\Eigen\Polynomials"
 #include "stdafx.h"
 
 namespace MenticsGame {
