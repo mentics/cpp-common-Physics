@@ -25,22 +25,12 @@ const double MAX_ACC = 10;
 
 class TrajectoryCalculator : CanLog {
 public:
-	TrajectoryCalculator() : CanLog("TrajectoryCalculator"), optArrive(nlopt::LD_SLSQP, 8), optEnterOrbit(nlopt::LD_SLSQP, 8) {
-		init(optArrive, MAX_ACC);
-		init(optEnterOrbit, MAX_ACC);
-	}
+	TrajectoryCalculator();
 
 	TrajectoryUniquePtr arrive(double atTime, TrajectoryPtr source, TrajectoryPtr target, double distance);
 
-	double arrive(InitData &data, std::vector<double>& x) {
-		setupArriveCase(&data);
-		return solve(optArrive, x, data, checkArrive);
-	}
-
-	double enterOrbit(InitData &data, std::vector<double>& x) {
-		setupEnterOrbitCase(&data);
-		return solve(optEnterOrbit, x, data, checkEnterOrbit);
-	}
+	double arrive(InitData &data, std::vector<double>& x);
+	double enterOrbit(InitData &data, std::vector<double>& x);
 
 	/// This will calculate a trajectory that will collide with a moving target using maximum acceleration.
 	/// Returning null probably means that the target is accelerating faster than maxAcc
