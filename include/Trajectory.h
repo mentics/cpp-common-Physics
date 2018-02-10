@@ -25,6 +25,7 @@ public:
 private:
 };
 
+
 class CompoundTrajectory : public Trajectory {
 public:
 	std::vector<TrajectoryUniquePtr> trajs;
@@ -32,35 +33,12 @@ public:
 	CompoundTrajectory(std::vector<TrajectoryUniquePtr>& trajs)
 			: Trajectory(trajs.front()->startTime, trajs.back()->endTime), trajs(std::move(trajs)) {}
 
-	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const {
-		std::vector<TrajectoryUniquePtr> newTrajs;
-		for (auto const& traj : trajs) {
-			newTrajs.push_back(std::move(traj->transform(offTime, offPos, offVel)));
-		}
-		return uniquePtr<CompoundTrajectory>(newTrajs);
-	}
+	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const;
+	Trajectory* trajAt(const double atTime) const;
 
-	Trajectory* trajAt(const double atTime) const {
-		for (auto traj = trajs.rbegin(); traj != trajs.rend(); ++traj) {
-			if ((*traj)->startTime <= atTime) {
-				return traj->get();
-			}
-		}
-		// TODO: define out of bounds behavior
-		return nullptr; // NOTE: yeah, it may crash till we fix this
-	}
-
-	void posVel(const double atTime, vect3& pos, vect3& vel) const {
-		trajAt(atTime)->posVel(atTime, pos, vel);
-	}
-
-	void posVelAcc(const double atTime, PosVelAccPtr pva) const {
-		trajAt(atTime)->posVelAcc(atTime, pva);
-	}
-
-	void posVelGrad(const double atTime, vect3& posGrad, vect3& velGrad) const {
-		trajAt(atTime)->posVelGrad(atTime, posGrad, velGrad);
-	}
+	void posVel(const double atTime, vect3& pos, vect3& vel) const;
+	void posVelAcc(const double atTime, PosVelAccPtr pva) const;
+	void posVelGrad(const double atTime, vect3& posGrad, vect3& velGrad) const;
 };
 PTRS(CompoundTrajectory)
 
@@ -105,37 +83,16 @@ public:
 	BasicTrajectory(const double startTime, const double endTime, const vect3 p0, const vect3 v0, const vect3 a0)
 		: Trajectory(startTime, endTime), p0(p0), v0(v0), a0(a0) {}
 
-	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const {
-		PosVelAcc pva;
-		posVelAcc(offTime, nn::nn_addr(pva));
-		return uniquePtr<BasicTrajectory>(0, endTime - offTime, pva.pos - offPos, pva.vel - offVel, pva.acc);
-	}
-
-	virtual void posVel(const double atTime, vect3& outPos, vect3& outVel) const {
-		const double t = (atTime - startTime);
-		outVel = v0 + t * a0;
-		outPos = p0 + t * v0 + (0.5 * t * t) * a0;
-	}
-
-	virtual void posVelAcc(const double atTime, PosVelAccPtr pva) const {
-		const double t = (atTime - startTime);
-		pva->acc = a0;
-		pva->vel = v0 + t * a0;
-		pva->pos = p0 + t * v0 + (0.5 * t * t) * a0;
-	}
-
-	virtual void posVelGrad(const double atTime, vect3& outPosGrad, vect3& outVelGrad) const {
-		const double t = (atTime - startTime);
-		outPosGrad = v0 + t * a0;
-		outVelGrad = a0;
-	}
+	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const;
+	virtual void posVel(const double atTime, vect3& outPos, vect3& outVel) const;
+	virtual void posVelAcc(const double atTime, PosVelAccPtr pva) const;
+	virtual void posVelGrad(const double atTime, vect3& outPosGrad, vect3& outVelGrad) const;
 };
 PTRS(BasicTrajectory)
 
 extern const vect3 VZERO;
 
-inline BasicTrajectoryUniquePtr makeTrajZero() {
-	return uniquePtr<BasicTrajectory>(0.0, 1.0E31, VZERO, VZERO, VZERO);
 }
 
-}
+
+inline BasicTrajectoryUniquePtr makeTrajZero();

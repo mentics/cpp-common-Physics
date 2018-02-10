@@ -158,4 +158,21 @@ void TrajectoryCalculator::setupEnterOrbitCase(InitData* data) {
 	optEnterOrbit.add_inequality_constraint(constraintA2, data, CONSTRAINT_ERROR);
 }
 
+
+TrajectoryCalculator::TrajectoryCalculator() : CanLog("TrajectoryCalculator"), optArrive(nlopt::LD_SLSQP, 8), optEnterOrbit(nlopt::LD_SLSQP, 8) {
+	init(optArrive, MAX_ACC);
+	init(optEnterOrbit, MAX_ACC);
+}
+
+double TrajectoryCalculator::arrive(InitData &data, std::vector<double>& x) {
+	setupArriveCase(&data);
+	return solve(optArrive, x, data, checkArrive);
+}
+
+double TrajectoryCalculator::enterOrbit(InitData &data, std::vector<double>& x) {
+	setupEnterOrbitCase(&data);
+	return solve(optEnterOrbit, x, data, checkEnterOrbit);
+}
+
+
 }
