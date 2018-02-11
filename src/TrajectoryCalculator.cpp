@@ -41,7 +41,6 @@ void TrajectoryCalculator::init(nlopt::opt& opt, const double maxAcc) {
 }
 
 double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, InitData& data, const calcError checkError) {
-	const auto m_log = spdlog::stdout_logger_st("unique name");
 	int iterations = 0;
 	bool found = false;
 	while (!found && iterations <= 100) {

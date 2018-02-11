@@ -26,7 +26,6 @@ namespace PhysicsTest {
 		}
 
 		TEST_METHOD(TestArrive) {
-			const auto m_log = spdlog::stdout_logger_mt("unique_name");
 			TrajectoryCalculator calc;
 			vect3 pos, vel, targPos, targVel;
 
@@ -105,7 +104,6 @@ namespace PhysicsTest {
 		// * in TrajectoryCalculator::arrive the distance parameter does not alter the result
 
 		TEST_METHOD(TestArriveCompoundTrajectory) {
-			const auto m_log = spdlog::stdout_logger_mt("unique_name 2");
 			BasicTrajectory source = randomBasicTrajectory();
 
 			std::vector<TrajectoryUniquePtr> trajs;

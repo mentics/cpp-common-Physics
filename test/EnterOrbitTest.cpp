@@ -25,7 +25,6 @@ namespace PhysicsTest {
 		}
 
 		TEST_METHOD(TestEnterOrbit) {
-			const auto m_log = spdlog::stdout_logger_st("unique name");
 
 			TrajectoryCalculator calc;
 			vect3 pos, vel, targPos, targVel;
