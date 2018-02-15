@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include <Eigen/Dense>
+#include <vector>
 #include "TestOld.h"
 
 

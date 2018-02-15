@@ -2,6 +2,7 @@
 
 #include "TrajectoryCalculator.h"
 
+
 namespace MenticsGame {
 
 const double CLOSE_ENOUGH = 0.01;
