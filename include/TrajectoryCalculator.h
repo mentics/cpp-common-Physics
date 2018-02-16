@@ -4,7 +4,7 @@
 #include "MenticsCommonTest.h"
 #include "OptimizerCommon.h"
 #include "unsupported\Eigen\Polynomials"
-#include "stdafx.h"
+
 
 namespace MenticsGame {
 
