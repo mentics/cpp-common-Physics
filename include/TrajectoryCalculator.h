@@ -24,9 +24,9 @@ const double MAX_ACC = 10;
 // Class TrajectorCalculator is not thread safe.
 // When we move to multithreaded processing, each thread will have it's own instance of TrajectoryCalculator.
 
-class TrajectoryCalculator : CanLog {
+class TrajectoryCalculator {
 public:
-	TrajectoryCalculator() : CanLog("TrajectoryCalculator"), optArrive(nlopt::LD_SLSQP, 8), optEnterOrbit(nlopt::LD_SLSQP, 8) {
+	TrajectoryCalculator() : optArrive(nlopt::LD_SLSQP, 8), optEnterOrbit(nlopt::LD_SLSQP, 8) {
 		init(optArrive, MAX_ACC);
 		init(optEnterOrbit, MAX_ACC);
 	}
