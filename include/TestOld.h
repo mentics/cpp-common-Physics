@@ -5,7 +5,7 @@
 namespace MenticsGame {
 
 template <int SIZE>
-using vector = Eigen::Matrix<double, SIZE, 1>;
+using Evector = Eigen::Matrix<double, SIZE, 1>;
 using vect3 = Eigen::Vector3d;
 using matrix = Eigen::Matrix<double, 3, 8>;
 

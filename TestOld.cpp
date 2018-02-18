@@ -156,7 +156,7 @@ namespace MenticsGame {
 		double result = endVelocity.squaredNorm() - 0.5 * MAX_ACC_OLD * data->distance;
 
 		if (!grad.empty()) {
-			const vector<8>& g = 2.0 * endVelocity.adjoint() * endVelGrad(x, data);
+			const Evector<8>& g = 2.0 * endVelocity.adjoint() * endVelGrad(x, data);
 			memcpy((void *)grad.data(), (void *)g.data(), sizeof(double) * 8);
 		}
 
@@ -169,7 +169,7 @@ namespace MenticsGame {
 		double result = endVel(x, data).dot(data->axis);
 
 		if (!grad.empty()) {
-			const vector<8>& g = data->axis.adjoint() * endVelGrad(x, data);
+			const Evector<8>& g = data->axis.adjoint() * endVelGrad(x, data);
 			memcpy((void *)grad.data(), (void *)g.data(), sizeof(double) * 8);
 		}
 
@@ -185,7 +185,7 @@ namespace MenticsGame {
 		double result = endRelPosition.dot(endVelocity);
 
 		if (!grad.empty()) {
-			const vector<8>& g = endVelocity.adjoint() * endRelPosGrad(x, data) + endRelPosition.adjoint() * endVelGrad(x, data);
+			const Evector<8>& g = endVelocity.adjoint() * endRelPosGrad(x, data) + endRelPosition.adjoint() * endVelGrad(x, data);
 			memcpy((void *)grad.data(), (void *)g.data(), sizeof(double) * 8);
 		}
 
@@ -199,7 +199,7 @@ namespace MenticsGame {
 		double result = endRelPos(x, data).dot(data->axis);
 
 		if (!grad.empty()) {
-			const vector<8>& g = (data->axis.adjoint() * endRelPosGrad(x, data));
+			const Evector<8>& g = (data->axis.adjoint() * endRelPosGrad(x, data));
 			memcpy((void *)grad.data(), (void *)g.data(), sizeof(double) * 8);
 		}
 
@@ -214,7 +214,7 @@ namespace MenticsGame {
 		double result = endRelPosition.squaredNorm() - data->distance * data->distance;
 
 		if (!grad.empty()) {
-			const vector<8>& g = 2.0 * endRelPosition.adjoint() * endRelPosGrad(x, data);
+			const Evector<8>& g = 2.0 * endRelPosition.adjoint() * endRelPosGrad(x, data);
 			memcpy((void *)grad.data(), (void *)g.data(), sizeof(double) * 8);
 		}
 
