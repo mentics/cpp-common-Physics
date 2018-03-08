@@ -40,17 +40,17 @@ public:
 			std::vector<double> x(8);
 			const double result = calc.arrive(data, x);
 			if (result <= 0) {
-				log->error("**** ERROR: could not find solution ****\n");
+				mlog->error("**** ERROR: could not find solution ****\n");
 				Assert::Fail();
 			}
 			else {
-				log->info("Found solution: {0}\n", Eigen::Map<vect8>(x.data()).adjoint());
+				mlog->info("Found solution: {0}\n", Eigen::Map<vect8>(x.data()).adjoint());
 			}
 
 			traj.posVel(x[6] + x[7], targPos, targVel);
-			log->info("{0}, L{1}", targPos.adjoint(), targVel.adjoint());
+			mlog->info("{0}, L{1}", targPos.adjoint(), targVel.adjoint());
 			endForNloptX(x, pos, vel);
-			log->info("{0}, L{1}", pos.adjoint(), vel.adjoint());
+			mlog->info("{0}, L{1}", pos.adjoint(), vel.adjoint());
 			double resultDistance = (pos - targPos).norm();
 			Assert::IsTrue(resultDistance < 0.1);
 			Assert::IsTrue(pos.isApprox(targPos, 0.1));
@@ -59,7 +59,7 @@ public:
 			sumCalls += funcCalls;
 		}
 
-		log->info("Arrive avg func calls: {0}\n", (sumCalls / NUM_CASES));
+		mlog->info("Arrive avg func calls: {0}\n", (sumCalls / NUM_CASES));
 	}
 
 	TEST_METHOD(TestArriveTrajectorySame) {
@@ -124,14 +124,14 @@ public:
 		double endtime = arrive->endTime;
 		vect3 apos, avel;
 		arrive->posVel(endtime, apos, avel);
-		log->info("{0}, L{1}", apos.adjoint(), avel.adjoint());
+		mlog->info("{0}, L{1}", apos.adjoint(), avel.adjoint());
 
 		vect3 pos, vel;
 		target.posVel(endtime, pos, vel);
-		log->info("{0}, L{1}", pos.adjoint(), vel.adjoint());
+		mlog->info("{0}, L{1}", pos.adjoint(), vel.adjoint());
 
 		double resultDistance = (apos - pos).norm();
-		log->info("Distance: {0}", resultDistance);
+		mlog->info("Distance: {0}", resultDistance);
 
 		Assert::IsTrue(endtime > 2); // Ensure the end is in the second target BasicTrajectory
 		Assert::IsTrue(vel.isApprox(avel, 0.1), L"Velocity are not equa");

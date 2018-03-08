@@ -39,11 +39,11 @@ public:
 			std::vector<double> x(8);
 			const double result = calc.enterOrbit(data, x);
 			if (result <= 0) {
-				log->error("**** ERROR: could not find solution ****\n  for {0},{1},{2},{3},{4}", traj.p0, traj.v0, traj.a0, data.distance, data.axis);
+				mlog->error("**** ERROR: could not find solution ****\n  for {0},{1},{2},{3},{4}", traj.p0, traj.v0, traj.a0, data.distance, data.axis);
 				Assert::Fail();
 			}
 			else {
-				log->info("Found solution: {0}", Eigen::Map<vect8>(x.data()).adjoint());
+				mlog->info("Found solution: {0}", Eigen::Map<vect8>(x.data()).adjoint());
 			}
 
 			traj.posVel(x[6] + x[7], targPos, targVel);
@@ -56,7 +56,7 @@ public:
 			sumCalls += funcCalls;
 		}
 
-		log->info("EnterOrbit avg func calls: {0}\n", (sumCalls / NUM_CASES));
+		mlog->info("EnterOrbit avg func calls: {0}\n", (sumCalls / NUM_CASES));
 	}
 		};
 	}

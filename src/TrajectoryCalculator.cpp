@@ -80,13 +80,13 @@ double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, Init
 		double minf;
 		try {
 			const nlopt::result result = opt.optimize(x, minf);
-			log->debug("iteration {0} funcCalls={1}", iterations, funcCalls);
+			mlog->debug("iteration {0} funcCalls={1}", iterations, funcCalls);
 			if (result < 0) {
-				log->warn( "nlopt failed!");
+				mlog->warn( "nlopt failed!");
 			} else {
 				const double error = checkError(x, &data);
 				if (error > CLOSE_ENOUGH) {
-					log->warn("Checked error failure: {0} \n", result);
+					mlog->warn("Checked error failure: {0} \n", result);
 					continue;
 				} else {
 					//printf("Found minimum at %g,%g after calls func: %d constraints: %d\n", x[6], x[7], funcCalls, constraintCalls);
@@ -96,12 +96,12 @@ double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, Init
 			}
 		}
 		catch (const std::exception& e) {
-			log->debug("iteration {0} funcCalls={1}  (nlopt exception: {2})\n", iterations ,funcCalls , e.what());
+			mlog->debug("iteration {0} funcCalls={1}  (nlopt exception: {2})\n", iterations ,funcCalls , e.what());
 			const double error = checkError(x, &data);
 			if (error > CLOSE_ENOUGH) {
 			}
 			else {
-				log->warn("Exception but constraints satisfied\n");
+				mlog->warn("Exception but constraints satisfied\n");
 				found = true;
 			}
 			continue;
