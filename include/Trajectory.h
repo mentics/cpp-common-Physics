@@ -98,7 +98,7 @@ PTRS(BasicTrajectory)
 extern const vect3 VZERO;
 
 inline BasicTrajectoryUniquePtr makeTrajZero() {
-	return uniquePtr<BasicTrajectory>(0.0, 1.0E31, VZERO, VZERO, VZERO);
+	return uniquePtr<BasicTrajectory>(0.0, FOREVER, VZERO, VZERO, VZERO);
 }
 
 }
