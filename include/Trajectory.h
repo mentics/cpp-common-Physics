@@ -83,9 +83,6 @@ public:
 		: Trajectory(startTime, endTime), p0(a0),v0(v0), a0(a0)
 	{
 	}
-	static inline BasicTrajectory randomBasicTrajectory() {
-		return BasicTrajectory(0, 0, randomVector(1), randomVector(1), randomVector(1));
-	}
 
 	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const;
 	virtual void posVel(const double atTime, vect3& outPos, vect3& outVel) const;
@@ -98,6 +95,10 @@ extern const vect3 VZERO;
 
 inline BasicTrajectoryUniquePtr makeTrajZero() {
 	return uniquePtr<BasicTrajectory>(0.0, FOREVER, VZERO, VZERO, VZERO);
+}
+
+inline BasicTrajectoryUniquePtr makeTrajRandom(double posScale, double velScale, double accScale) {
+	return uniquePtr<BasicTrajectory>(0, 0, randomVector(posScale), randomVector(velScale), randomVector(accScale));
 }
 
 }
