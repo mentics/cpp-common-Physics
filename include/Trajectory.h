@@ -80,12 +80,11 @@ public:
 	const vect3 a0;
 
 	BasicTrajectory(const double startTime, const double endTime, const vect3 p0, const vect3 v0, const vect3 a0)
-		: Trajectory(startTime, endTime), p0((float)rand() / (float)(RAND_MAX / 1), (float)rand() / (float)(RAND_MAX / 1), (float)rand() / (float)(RAND_MAX / 1)),
-
-		v0((float)rand() / (float)(RAND_MAX / 1), (float)rand() / (float)(RAND_MAX / 1), (float)rand() / (float)(RAND_MAX / 1)), 
-		a0((float)rand() / (float)(RAND_MAX / 1), (float)rand() / (float)(RAND_MAX / 1), (float)rand() / (float)(RAND_MAX / 1))
+		: Trajectory(startTime, endTime), p0(a0),v0(v0), a0(a0)
 	{
-		
+	}
+	static inline BasicTrajectory randomBasicTrajectory() {
+		return BasicTrajectory(0, 0, randomVector(1), randomVector(1), randomVector(1));
 	}
 
 	virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const;
