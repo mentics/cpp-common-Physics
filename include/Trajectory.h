@@ -80,7 +80,7 @@ public:
 	const vect3 a0;
 
 	BasicTrajectory(const double startTime, const double endTime, const vect3 p0, const vect3 v0, const vect3 a0)
-		: Trajectory(startTime, endTime), p0(a0),v0(v0), a0(a0)
+		: Trajectory(startTime, endTime), p0(p0),v0(v0), a0(a0)
 	{
 	}
 
