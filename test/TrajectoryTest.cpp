@@ -5,6 +5,8 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
+using namespace MenticsGame;
+
 namespace PhysicsTest {
 	TEST_CLASS(TrajectoryTest) {
 		//boost::log::sources::severity_logger<boost::log::trivial::severity_level> lg;

@@ -1,7 +1,12 @@
 #pragma once
 
 #include "OptimizerCommon.h"
+#include "MenticsCommon.h"  
+#include "MenticsMath.h" 
+#include "Trajectory.h" 
 
+
+using namespace MenticsGame;
 
 inline BasicTrajectory randomBasicTrajectory() {
 	return BasicTrajectory(0, 100, randomVector(100), randomVector(2), randomVector(1));
