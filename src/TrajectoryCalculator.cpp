@@ -7,7 +7,7 @@ namespace MenticsGame {
 
 const double CLOSE_ENOUGH = 0.01;
 
-
+TrajectoryCalculator TRAJ_CALC;
 
 double TrajectoryCalculator::arrive(InitData &data, std::vector<double>& x) {
 	setupArriveCase(&data); 
@@ -18,7 +18,6 @@ double TrajectoryCalculator::enterOrbit(InitData &data, std::vector<double>& x) 
 	setupEnterOrbitCase(&data);
 	return solve(optEnterOrbit, x, data, checkEnterOrbit);
 }
-
 
 TrajectoryUniquePtr TrajectoryCalculator::arrive(double atTime, TrajectoryPtr source, TrajectoryPtr target, double distance) {
 	vect3 p0, v0;
