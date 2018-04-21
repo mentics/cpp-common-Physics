@@ -7,6 +7,8 @@
 
 namespace MenticsGame {
 
+typedef double(*calcError)(const std::vector<double> &x, void *data);
+
 double constraintA1(const std::vector<double>& x, std::vector<double>& grad, void* vdata);
 double constraintA2(const std::vector<double>& x, std::vector<double>& grad, void* vdata);
 
@@ -22,7 +24,6 @@ const double MAX_ACC = 10;
 
 // Class TrajectorCalculator is not thread safe.
 // When we move to multithreaded processing, each thread will have it's own instance of TrajectoryCalculator.
-
 class TrajectoryCalculator {
 public:
 	TrajectoryCalculator() : optArrive(nlopt::LD_SLSQP, 8), optEnterOrbit(nlopt::LD_SLSQP, 8) {
@@ -51,5 +52,6 @@ private:
 	void setupArriveCase(InitData* data);
 	void setupEnterOrbitCase(InitData* data);
 };
+extern TrajectoryCalculator TRAJ_CALC;
 
 }
