@@ -5,19 +5,23 @@ namespace MenticsGame {
 
 const double CLOSE_ENOUGH = 0.01;
 
-TrajectoryCalculator TRAJ_CALC;
+TrajectoryCalculator<double> TRAJ_CALC;
 
-double TrajectoryCalculator::arrive(InitData &data, std::vector<double>& x) {
+template <typename TimeType>
+double TrajectoryCalculator<TimeType>::arrive(InitData &data, std::vector<double>& x) {
     setupArriveCase(&data);
     return solve(optArrive, x, data, checkArrive);
 }
 
-double TrajectoryCalculator::enterOrbit(InitData &data, std::vector<double>& x) {
+template <typename TimeType>
+
+double TrajectoryCalculator<TimeType>::enterOrbit(InitData &data, std::vector<double>& x) {
     setupEnterOrbitCase(&data);
     return solve(optEnterOrbit, x, data, checkEnterOrbit);
 }
 
-TrajectoryUniquePtr TrajectoryCalculator::arrive(double atTime, TrajectoryPtr source, TrajectoryPtr target, double distance) {
+template <typename TimeType>
+TrajectoryUniquePtr<TimeType> TrajectoryCalculator<TimeType>::arrive(double atTime, TrajectoryPtr<TimeType> source, TrajectoryPtr<TimeType> target[2], double distance) {
     vect3 p0, v0;
     source->posVel(atTime, p0, v0);
     std::vector<double> x(8); // TODO: we can probably change this to an array all the way down but not sure we can because nlopt might require a vector if we can't use pointer/C-array style call
@@ -37,11 +41,12 @@ TrajectoryUniquePtr TrajectoryCalculator::arrive(double atTime, TrajectoryPtr so
     trajs.emplace_back(uniquePtr<BasicTrajectory>(atTime, tmid, p0, v0, a1));
     vect3 p, v;
     trajs[0]->posVel(tmid, p, v);
-    trajs.emplace_back(uniquePtr<BasicTrajectory>(tmid, tend, p, v, a2));
-    return uniquePtr<CompoundTrajectory>(std::move(trajs));
+    trajs.emplace_back(uniquePtr<BasicTrajectory<TimeType>>(tmid, tend, p, v, a2));
+    return uniquePtr<BasicTrajectory>(std::move(trajs));
 }
 
-void TrajectoryCalculator::init(nlopt::opt& opt, const double maxAcc) {
+template <typename TimeType>
+void TrajectoryCalculator<TimeType>::init(nlopt::opt& opt, const double maxAcc) {
     std::vector<double> lowerBound = {-maxAcc, -maxAcc, -maxAcc, -maxAcc, -maxAcc, -maxAcc, 0, 0};
     std::vector<double> upperBound = {maxAcc, maxAcc, maxAcc, maxAcc, maxAcc, maxAcc, 50, 50};
     opt.set_lower_bounds(lowerBound);
@@ -51,7 +56,8 @@ void TrajectoryCalculator::init(nlopt::opt& opt, const double maxAcc) {
     opt.set_maxeval(100);
 }
 
-double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, InitData& data, const calcError checkError) {
+template <typename TimeType>
+double TrajectoryCalculator<TimeType>::solve(nlopt::opt& opt, std::vector<double>& x, InitData& data, const calcError checkError) {
     int iterations = 0;
     bool found = false;
     while (!found && iterations <= 100) {
@@ -105,7 +111,8 @@ double TrajectoryCalculator::solve(nlopt::opt& opt, std::vector<double>& x, Init
     return found ? iterations : -1;
 }
 
-std::tuple<TrajectoryUniquePtr, bool> TrajectoryCalculator::calcCollideTraj(const PosVelAcc& target, double maxAcc, double baseTime) {
+template <typename TimeType>
+std::tuple<TrajectoryUniquePtr<TimeType>, bool> TrajectoryCalculator<TimeType>::calcCollideTraj(const PosVelAcc& target, double maxAcc, double baseTime) {
     vect3 p0(0, 0, 0), v0(0, 0, 0);
     vect3 vv = target.vel * 2; // (tv0 - v0) * 2
     vect3 pp = target.pos * 2; // (tp0 - p0 ) * 2
@@ -137,12 +144,13 @@ std::tuple<TrajectoryUniquePtr, bool> TrajectoryCalculator::calcCollideTraj(cons
         double tinv = 1 / lowest;
         double tinv2 = tinv * tinv;
         vect3 acc = target.acc + vv * tinv + pp * tinv2;
-        return std::make_tuple(uniquePtr<BasicTrajectory>(baseTime, baseTime + lowest, p0, v0, acc), true);
+        return std::make_tuple(uniquePtr<BasicTrajectory<TimeType>>(baseTime, baseTime + lowest, p0, v0, acc), true);
     }
-    return std::make_tuple(uniquePtr<BasicTrajectory>(0, FOREVER, p0, v0, target.acc), false);
+    return std::make_tuple(uniquePtr<BasicTrajectory<TimeType>>(0, FOREVER, p0, v0, target.acc), false);
 }
 
-void TrajectoryCalculator::setupArriveCase(InitData* data) {
+template <typename TimeType>
+void TrajectoryCalculator<TimeType>::setupArriveCase(InitData* data) {
     optArrive.set_min_objective(arriveObjFunc, data);
 
     optArrive.remove_equality_constraints();
@@ -154,7 +162,8 @@ void TrajectoryCalculator::setupArriveCase(InitData* data) {
     optArrive.add_inequality_constraint(constraintA2, data, CONSTRAINT_ERROR);
 }
 
-void TrajectoryCalculator::setupEnterOrbitCase(InitData* data) {
+template <typename TimeType>
+void TrajectoryCalculator<TimeType>::setupEnterOrbitCase(InitData* data) {
     optEnterOrbit.set_min_objective(enterOrbitObjFunc, data);
 
     optEnterOrbit.remove_equality_constraints();

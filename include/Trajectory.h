@@ -5,39 +5,28 @@
 
 namespace MenticsGame {
 
+template <typename TimeType = TimePoint> 
 class Trajectory;
-PTRS(Trajectory)
+PTRS1(Trajectory, TimeType)   
 
+template <typename TimeType = TimePoint>
 class Trajectory {
 public:
     const double startTime;
     const double endTime;
 
-    Trajectory(const double startTime, const double endTime) : startTime(startTime), endTime(endTime) {}
+    Trajectory(const TimeType startTime, const TimeType endTime) : startTime(startTime), endTime(endTime) {}
 
-    virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const = 0;
+    virtual TrajectoryUniquePtr<TimeType> transform(const TimeType offTime, const vect3& offPos, const vect3& offVel) const = 0; 
 
-    virtual void posVel(const double atTime, vect3& pos, vect3& vel) const = 0;
-    virtual void posVelAcc(const double atTime, PosVelAccPtr pva) const = 0;
-    virtual void posVelGrad(const double atTime, vect3& posGrad, vect3& velGrad) const = 0;
+    static double toLocal(TimeType t) { return (double)t; } 
+    virtual void posVel(const TimeType atTime, vect3& pos, vect3& vel) const = 0;
+    virtual void posVelAcc(const TimeType atTime, PosVelAccPtr pva) const = 0;
+    virtual void posVelGrad(const TimeType atTime, vect3& posGrad, vect3& velGrad) const = 0;
 
 private:
 };
 
-class CompoundTrajectory : public Trajectory {
-public:
-    std::vector<TrajectoryUniquePtr> trajs;
-
-    CompoundTrajectory(std::vector<TrajectoryUniquePtr>& trajs)
-        : Trajectory(trajs.front()->startTime, trajs.back()->endTime), trajs(std::move(trajs)) {}
-
-    virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const;
-    Trajectory* trajAt(const double atTime) const;
-    void posVel(const double atTime, vect3& pos, vect3& vel) const;
-    void posVelAcc(const double atTime, PosVelAccPtr pva) const;
-    void posVelGrad(const double atTime, vect3& posGrad, vect3& velGrad) const;
-};
-PTRS(CompoundTrajectory)
 
 
 // Wraps a trajectory providing a way to offset it in time, position, and velocity.
@@ -72,30 +61,34 @@ PTRS(CompoundTrajectory)
 //};
 //PTRS(OffsetTrajectory)
 
-class BasicTrajectory : public Trajectory {
+template <typename TimeType = TimePoint>
+class BasicTrajectory : public Trajectory<TimeType> {
 public:
     const vect3 p0;
     const vect3 v0;
-    const vect3 a0;
+    const vect3 a0; 
 
     BasicTrajectory(const double startTime, const double endTime, const vect3 p0, const vect3 v0, const vect3 a0)
         : Trajectory(startTime, endTime), p0(p0), v0(v0), a0(a0) {}
-
-    virtual TrajectoryUniquePtr transform(const double offTime, const vect3& offPos, const vect3& offVel) const;
-    virtual void posVel(const double atTime, vect3& outPos, vect3& outVel) const;
-    virtual void posVelAcc(const double atTime, PosVelAccPtr pva) const;
-    virtual void posVelGrad(const double atTime, vect3& outPosGrad, vect3& outVelGrad) const;
+    int f() {
+        return 0;
+    }
+    virtual TrajectoryUniquePtr<TimeType> transform(const TimeType offTime, const vect3& offPos, const vect3& offVel) const;    
+    virtual void posVel(const TimeType atTime, vect3& outPos, vect3& outVel) const;
+    virtual void posVelAcc(const TimeType atTime, PosVelAccPtr pva) const;
+    virtual void posVelGrad(const TimeType atTime, vect3& outPosGrad, vect3& outVelGrad) const;
 };
-PTRS(BasicTrajectory)
+PTRS1(BasicTrajectory, TimeType) 
 
 extern const vect3 VZERO;
 
-inline BasicTrajectoryUniquePtr makeTrajZero() {
-    return uniquePtr<BasicTrajectory>(0.0, FOREVER, VZERO, VZERO, VZERO);
+inline BasicTrajectoryUniquePtr<double> makeTrajZero() {
+    return uniquePtr<BasicTrajectory<double>>(0.0, FOREVER, VZERO, VZERO, VZERO);
 }
 
-inline BasicTrajectoryUniquePtr makeTrajRandom(double posScale, double velScale, double accScale) {
-    return uniquePtr<BasicTrajectory>(0, 0, randomVector(posScale), randomVector(velScale), randomVector(accScale));
+typedef uint64_t RealTime; // nanoseconds
+inline BasicTrajectoryUniquePtr<RealTime> makeTrajRandom(double posScale, double velScale, double accScale) {
+    return uniquePtr<BasicTrajectory<RealTime>>(0, 0, randomVector(posScale), randomVector(velScale), randomVector(accScale));
 }
 
 }

@@ -22,6 +22,7 @@ const double MAX_ACC = 10;
 
 // Class TrajectorCalculator is not thread safe.
 // When we move to multithreaded processing, each thread will have it's own instance of TrajectoryCalculator.
+template <typename TimeType>
 class TrajectoryCalculator {
 public:
     TrajectoryCalculator() : optArrive(nlopt::LD_SLSQP, 8), optEnterOrbit(nlopt::LD_SLSQP, 8) {
@@ -29,14 +30,14 @@ public:
         init(optEnterOrbit, MAX_ACC);
     }
 
-    TrajectoryUniquePtr arrive(double atTime, TrajectoryPtr source, TrajectoryPtr target, double distance);
+    TrajectoryUniquePtr<TimeType> arrive(double atTime, TrajectoryPtr<TimeType> source, TrajectoryPtr<TimeType> target[2], double distance);
 
     double arrive(InitData &data, std::vector<double>& x);
     double enterOrbit(InitData &data, std::vector<double>& x);
 
     /// This will calculate a trajectory that will collide with a moving target using maximum acceleration.
     /// Returning null probably means that the target is accelerating faster than maxAcc
-    std::tuple<TrajectoryUniquePtr, bool> calcCollideTraj(const PosVelAcc& target, double maxAcc, double baseTime);
+    std::tuple<TrajectoryUniquePtr<TimeType>, bool> calcCollideTraj(const PosVelAcc& target, double maxAcc, double baseTime);
 
 private:
     nlopt::opt optArrive;
@@ -50,6 +51,6 @@ private:
     void setupArriveCase(InitData* data);
     void setupEnterOrbitCase(InitData* data);
 };
-extern TrajectoryCalculator TRAJ_CALC;
+extern TrajectoryCalculator<double> TRAJ_CALC;
 
 }

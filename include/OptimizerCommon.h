@@ -13,13 +13,13 @@ const double EPS = 1E-3;
 extern int funcCalls;
 
 struct InitData {
-	TrajectoryUniquePtr target;
+	TrajectoryUniquePtr<TimePoint> target;
 	vect3 axis;		// The axis for the orbit to enter in enter orbit trajectory
 	double distance;// The radial distance for enter orbit, or the distance from target for arrive
 	double maxAcc;	// Maximum acceleration allowed
-	double maxAcc2;	// maxAcc^2 stored for efficiency because it's used many times
+	double maxAcc2;	// maxAcc^2 stored for efficiency because it's used many times 
 
-	static InitData forArrive(double atTime, const vect3 &p0, const vect3 &v0, const TrajectoryPtr target, const double distance, const double maxAcc) {
+	static InitData forArrive(double atTime, const vect3 &p0, const vect3 &v0, const TrajectoryPtr<TimePoint> target, const double distance, const double maxAcc) {
 		return InitData {
 			target->transform(atTime, p0, v0),
 			VZERO,

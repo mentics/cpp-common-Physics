@@ -111,7 +111,7 @@ public:
 
         // ok
         trajs.push_back(uniquePtr<BasicTrajectory>(0, 2, randomVector(50), randomVector(6), randomVector(7)));
-        trajs.push_back(uniquePtr<BasicTrajectory>(2, 10, randomVector(200), randomVector(4), randomVector(3)));
+        trajs.push_back(uniquePtr<BasicTrajectory>(2, 10, randomVector(200), randomVector(4), randomVector(3))); 
 
         CompoundTrajectory target(trajs);
 
