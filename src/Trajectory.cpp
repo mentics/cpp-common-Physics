@@ -12,14 +12,14 @@ TrajectoryUniquePtr<TimeType> BasicTrajectory<TimeType>::transform(const TimeTyp
 
 template <typename TimeType = TimePoint>
 void BasicTrajectory<TimeType>::posVel(const TimeType atTime, vect3& outPos, vect3& outVel) const {
-    const double t = (atTime - startTime);
+    const double t = toLocal(atTime) - startTime;
     outVel = v0 + t * a0;
     outPos = p0 + t * v0 + (0.5 * t * t) * a0;
 }
 
 template <typename TimeType = TimePoint>
 void BasicTrajectory<TimeType>::posVelAcc(const TimeType atTime, PosVelAccPtr pva) const {
-    const double t = (atTime - startTime);
+    const double t = toLocal(atTime) - startTime;
     pva->acc = a0;
     pva->vel = v0 + t * a0;
     pva->pos = p0 + t * v0 + (0.5 * t * t) * a0;
@@ -27,7 +27,7 @@ void BasicTrajectory<TimeType>::posVelAcc(const TimeType atTime, PosVelAccPtr pv
 
 template <typename TimeType = TimePoint>
 void BasicTrajectory<TimeType>::posVelGrad(const TimeType atTime, vect3& outPosGrad, vect3& outVelGrad) const {
-    const double t = (atTime - startTime);
+    const double t = toLocal(atTime) - startTime;
     outPosGrad = v0 + t * a0;
     outVelGrad = a0;
 }

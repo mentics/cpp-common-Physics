@@ -160,7 +160,12 @@
     <ClCompile Include="src\Constraints.cpp" />
     <ClCompile Include="src\Trajectory.cpp" />
     <ClCompile Include="src\TrajectoryCalculator.cpp" />
-    <ClCompile Include="src\stdafx-physics.cpp" />
+    <ClCompile Include="src\stdafx-physics.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="TestOld.cpp" />
   </ItemGroup>
   <ItemGroup>

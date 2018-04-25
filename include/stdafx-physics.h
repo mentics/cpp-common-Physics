@@ -8,3 +8,4 @@
 
 #include "stdafx-math.h"
 #include "unsupported\Eigen\Polynomials"
+#include "nlopt.hpp"
