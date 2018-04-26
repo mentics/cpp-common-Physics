@@ -31,7 +31,7 @@ private:
 };
 
 
-template <typename TimeType = TimePoint>
+template <typename TimeType>
 class BasicTrajectory : public Trajectory<TimeType> {
 public:
     const vect3 p0;
