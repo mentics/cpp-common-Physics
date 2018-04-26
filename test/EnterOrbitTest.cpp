@@ -17,7 +17,7 @@ public:
     }
 
     TEST_METHOD(TestEnterOrbitGrad) {
-        BasicTrajectory traj = randomBasicTrajectory();
+        BasicTrajectory<RealTime> traj = randomBasicTrajectory(); 
         InitData data = setupRandomCase(nn::nn_addr(traj));
         std::vector<double> at = {1, 1, 1, 1, 1, 1, 1, 1};
         testGrad("enterOrbitEqualityConstraints", 5, enterOrbitEqualityConstraints, at, 0.0001, 0.0001, &data);
@@ -25,7 +25,7 @@ public:
 
     TEST_METHOD(TestEnterOrbit) {
 
-        TrajectoryCalculator calc;
+        TrajectoryCalculator<RealTime> calc;
         vect3 pos, vel, targPos, targVel;
 
         int sumCalls = 0;
@@ -33,7 +33,7 @@ public:
         for (int i = 0; i < NUM_CASES; i++) {
             funcCalls = 0;
 
-            BasicTrajectory traj = randomBasicTrajectory();
+            BasicTrajectory<RealTime> traj = randomBasicTrajectory();
             InitData data = setupRandomCase(nn::nn_addr(traj));
             std::vector<double> x(8);
             const double result = calc.enterOrbit(data, x);

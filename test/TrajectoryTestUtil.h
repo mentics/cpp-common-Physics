@@ -5,14 +5,15 @@
 #include "MenticsMath.h" 
 #include "Trajectory.h" 
 
+typedef uint64_t RealTime;
 
 using namespace MenticsGame;
 
-inline BasicTrajectory randomBasicTrajectory() {
-	return BasicTrajectory(0, 100, randomVector(100), randomVector(2), randomVector(1));
+inline BasicTrajectory<RealTime> randomBasicTrajectory() {
+	return BasicTrajectory<RealTime>(0, 100, randomVector(100), randomVector(2), randomVector(1));
 }
 
-inline InitData setupRandomCase(const TrajectoryPtr trajectory) {
+inline InitData setupRandomCase(const TrajectoryPtr<RealTime> trajectory) {
 	InitData data = {
 		trajectory->transform(0, vect3::Zero(), vect3::Zero()),
 		randomVector(1).normalized(),

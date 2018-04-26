@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Antuan\Desktop\PR\QuipTrials\lib\GSL\include;C:\Users\Antuan\Desktop\PR\QuipTrials\lib\oBB;C:\Users\Antuan\Desktop\PR\QuipTrials\lib\spdlog\include;C:\Users\Antuan\Desktop\PR\QuipTrials\physics\include;C:\Users\Antuan\Desktop\PR\QuipTrials\math\include;C:\Users\Antuan\Desktop\PR\QuipTrials\lib\eigen;C:\Users\Antuan\Desktop\PR\QuipTrials\common\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Antuan\Desktop\PR\QuipTrials\lib\GSL\include;C:\Users\Antuan\Desktop\PR\QuipTrials\lib\oBB;C:\Users\Antuan\Desktop\PR\QuipTrials\lib\spdlog\include;C:\Users\Antuan\Desktop\PR\QuipTrials\physics\include;C:\Users\Antuan\Desktop\PR\QuipTrials\math\include;C:\Users\Antuan\Desktop\PR\QuipTrials\lib\eigen;C:\Users\Antuan\Desktop\PR\QuipTrials\common\include;$(IncludePath);$(SolutionDir)physics\src</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -83,6 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -133,7 +134,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)math\include;$(SolutionDir)physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)math\include;$(SolutionDir)physics\src;$(SolutionDir)physics\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>

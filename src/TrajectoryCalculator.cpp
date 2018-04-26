@@ -21,7 +21,7 @@ double TrajectoryCalculator<TimeType>::enterOrbit(InitData &data, std::vector<do
 }
 
 template <typename TimeType>
-TrajectoryUniquePtr<TimeType> TrajectoryCalculator<TimeType>::arrive(double atTime, TrajectoryPtr<TimeType> source, TrajectoryPtr<TimeType> target[2], double distance) {
+void TrajectoryCalculator<TimeType>::arrive(double atTime, TrajectoryPtr<TimeType> source, TrajectoryPtr<TimeType> target, double distance, TrajectoryPtr<TimeType> result[2]) {
     vect3 p0, v0;
     source->posVel(atTime, p0, v0);
     std::vector<double> x(8); // TODO: we can probably change this to an array all the way down but not sure we can because nlopt might require a vector if we can't use pointer/C-array style call
@@ -42,7 +42,7 @@ TrajectoryUniquePtr<TimeType> TrajectoryCalculator<TimeType>::arrive(double atTi
     vect3 p, v;
     trajs[0]->posVel(tmid, p, v);
     trajs.emplace_back(uniquePtr<BasicTrajectory<TimeType>>(tmid, tend, p, v, a2));
-    return uniquePtr<BasicTrajectory>(std::move(trajs));
+    result = uniquePtr<BasicTrajectory>(std::move(trajs)); 
 }
 
 template <typename TimeType>

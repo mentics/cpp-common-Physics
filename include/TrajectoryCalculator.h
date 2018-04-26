@@ -35,6 +35,8 @@ public:
     double arrive(InitData &data, std::vector<double>& x);
     double enterOrbit(InitData &data, std::vector<double>& x);
 
+    void arrive(double atTime, TrajectoryPtr<TimeType> source, TrajectoryPtr<TimeType> target, double distance, TrajectoryPtr<TimeType>result[2]);
+
     /// This will calculate a trajectory that will collide with a moving target using maximum acceleration.
     /// Returning null probably means that the target is accelerating faster than maxAcc
     std::tuple<TrajectoryUniquePtr<TimeType>, bool> calcCollideTraj(const PosVelAcc& target, double maxAcc, double baseTime);

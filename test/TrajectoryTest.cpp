@@ -7,6 +7,8 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace MenticsGame;
 
+typedef uint64_t RealTime;
+
 namespace PhysicsTest {
 TEST_CLASS(TrajectoryTest) {
     //boost::log::sources::severity_logger<boost::log::trivial::severity_level> lg;
@@ -20,7 +22,7 @@ public:
     TEST_METHOD(TestTrajectory) {}
 
     TEST_METHOD(TestCollideTrajectory) {
-        TrajectoryCalculator calc;
+        TrajectoryCalculator<RealTime> calc;
         PosVelAcc target;
         target.pos = randomVector(100);
         target.vel = randomVector(2);
