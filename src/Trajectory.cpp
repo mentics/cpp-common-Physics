@@ -3,12 +3,16 @@
 
 namespace MenticsGame {
 
+
+
 template <typename TimeType = TimePoint>
 TrajectoryUniquePtr<TimeType> BasicTrajectory<TimeType>::transform(const TimeType offTime, const vect3& offPos, const vect3& offVel) const {
     PosVelAcc pva;
     posVelAcc(offTime, nn::nn_addr(pva));
     return uniquePtr<BasicTrajectory<TimeType>>(0, endTime - offTime, pva.pos - offPos, pva.vel - offVel, pva.acc);
 }
+
+
 
 template <typename TimeType = TimePoint>
 void BasicTrajectory<TimeType>::posVel(const TimeType atTime, vect3& outPos, vect3& outVel) const {

@@ -37,10 +37,10 @@ void TrajectoryCalculator<TimeType>::arrive(double atTime, TrajectoryPtr<TimeTyp
     const double t2 = x[7];
     const double tmid = atTime + t1;
     const double tend = tmid + t2;
-    //    output[0] = BasicTrajectory<TimeType>(atTime, tmid, p0, v0, a1);
+    output[0] = BasicTrajectory<TimeType>(atTime, tmid, p0, v0, a1);
     vect3 p, v;
     output[0].posVel(tmid, p, v);
-    //output[1] = BasicTrajectory<TimeType>(tmid, tend, p, v, a2);
+    output[1] = BasicTrajectory<TimeType>(tmid, tend, p, v, a2);
 }
 
 template <typename TimeType>

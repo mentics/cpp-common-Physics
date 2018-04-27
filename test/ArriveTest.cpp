@@ -65,7 +65,7 @@ public:
         BasicTrajectory<RealTime> source = randomBasicTrajectory();
         BasicTrajectory<RealTime> target = randomBasicTrajectory();
         BasicTrajectory<RealTime>  arriveTraj[2] = {randomBasicTrajectory(),randomBasicTrajectory()};
-        // calc.arrive(0, nn::nn_addr(source), nn::nn_addr(target), 2, nn::nn_addr(arriveTraj)); 
+        calc.arrive(0, nn::nn_addr(source), nn::nn_addr(target), 2, nn::nn_addr(*arriveTraj));  
 
         double endtime = arriveTraj->endTime;
 
@@ -84,7 +84,7 @@ public:
         BasicTrajectory<RealTime> source(0, 10, vect3(0, 0, 0), vect3(1, 0, 0), vect3(0, 0, 0));
         BasicTrajectory<RealTime> target(0, 10, vect3(1, 0, 0), vect3(1, 0, 0), vect3(0, 0, 0));
         BasicTrajectory<RealTime> arriveTraj[2] = {BasicTrajectory<RealTime>(0, 10, vect3(1, 0, 0), vect3(1, 0, 0), vect3(0, 0, 0)), randomBasicTrajectory()};
-        // calc.arrive(startTime, nn::nn_addr(source), nn::nn_addr(target), 2, nn::nn_addr(arriveTraj));
+        calc.arrive(startTime, nn::nn_addr(source), nn::nn_addr(target), 2, nn::nn_addr(*arriveTraj));
 
         double endtime = arriveTraj[0].endTime;
 

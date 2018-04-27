@@ -30,6 +30,8 @@ public:
 private:
 };
 
+template <typename TimeType>class BasicTrajectory;
+
 
 template <typename TimeType>
 class BasicTrajectory : public Trajectory<TimeType> {
@@ -41,6 +43,14 @@ public:
     BasicTrajectory(const double startTime, const double endTime, const vect3 p0, const vect3 v0, const vect3 a0)
         : Trajectory(startTime, endTime), p0(p0), v0(v0), a0(a0) {}
 
+
+    BasicTrajectory& operator=(BasicTrajectory<TimeType> const & other) {
+        this->a0 = other.a0;
+        this->p0 = other.p0;
+        this->v0 = other.v0;
+        return *this;
+    }
+
     virtual TrajectoryUniquePtr<TimeType> transform(const TimeType offTime, const vect3& offPos, const vect3& offVel) const;
     virtual void posVel(const TimeType atTime, vect3& outPos, vect3& outVel) const;
     virtual void posVelAcc(const TimeType atTime, PosVelAccPtr pva) const;
@@ -50,8 +60,11 @@ PTRS1(BasicTrajectory, TimeType)
 
 extern const vect3 VZERO;
 
-inline BasicTrajectoryUniquePtr<double> makeTrajZero() {
-    return uniquePtr<BasicTrajectory<double>>(0.0, FOREVER, VZERO, VZERO, VZERO);
+
+typedef uint64_t RealTime;
+
+inline BasicTrajectoryUniquePtr<RealTime> makeTrajZero() {
+    return uniquePtr<BasicTrajectory<RealTime>>(0.0, FOREVER, VZERO, VZERO, VZERO);
 }
 
 template<typename TimeType>
